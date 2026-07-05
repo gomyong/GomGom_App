@@ -1,0 +1,18 @@
+{
+  "name": "곰곰 · 북극곰 여정 트래커",
+  "short_name": "곰곰",
+  "description": "북극곰 한 마리의 1년 여정을 손그림 지도 위에서 따라가는 앱",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F5EFE2",
+  "theme_color": "#F5EFE2",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
