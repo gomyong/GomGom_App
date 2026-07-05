@@ -2,117 +2,126 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --font-hand: "Gaegu", "Caveat", cursive;
-  --font-body: "Pretendard", "Pretendard Variable", system-ui, -apple-system, sans-serif;
-  --paper: #f5efe2;
-  --ink: #2b2a26;
-}
+/* 곰곰 — Arctic Observation System 디자인 가이드
+   설백(#f7f9fb) 캔버스 · 차콜 잉크 · 아크틱 블루 · 1px 테크니컬 보더 · 모노 데이터 라벨 */
 
-.dark {
-  --paper: #1b2430;
-  --ink: #f5efe2;
+:root {
+  --surface: #f7f9fb;
+  --ink: #191c1e;
+  --primary: #0058bc;
+  --outline-variant: #c1c6d7;
+  --font-body: "Hanken Grotesk", "Pretendard", "Pretendard Variable", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 }
 
 html,
 body {
   padding: 0;
   margin: 0;
-  background: var(--paper);
+  background: var(--surface);
   color: var(--ink);
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
-  /* iOS 안전영역 + 넘침 방지 */
   overflow-x: hidden;
-}
-
-/* 종이 그레인 (PRD 5.6) — 아주 옅은 노이즈 */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.05;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 * {
   box-sizing: border-box;
 }
 
-.font-hand {
-  font-family: var(--font-hand);
+/* LABEL CAPS — 모노스페이스 카테고리 라벨 (data vs 서술 텍스트 구분) */
+.label-caps {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
-/* 손그림 리본 배너 (PRD 5.5) */
-.ribbon {
-  position: relative;
-  display: inline-block;
-  background: var(--ink);
-  color: var(--paper);
-  padding: 0.25rem 1.25rem;
-  font-family: var(--font-hand);
-  letter-spacing: 0.02em;
-}
-.ribbon::before,
-.ribbon::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  width: 0.7rem;
-  height: 100%;
-  background: var(--ink);
-}
-.ribbon::before {
-  left: -0.7rem;
-  clip-path: polygon(0 50%, 100% 0, 100% 100%);
-}
-.ribbon::after {
-  right: -0.7rem;
-  clip-path: polygon(0 0, 100% 50%, 0 100%);
+.font-mono-data {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
 }
 
-/* 느긋한 이징 (PRD 5.6) */
+/* 블루프린트 그리드 — 지도/캔버스 배경 */
+.map-grid {
+  background-color: #ffffff;
+  background-image:
+    linear-gradient(#f2f4f6 1px, transparent 1px),
+    linear-gradient(90deg, #f2f4f6 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* 곰 마커 펄스 링 (가이드: primary dot + pulsing 10% opacity ring) */
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.35;
+  }
+  80% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+.pulse-ring {
+  animation: pulse-ring 2.4s cubic-bezier(0.22, 0.61, 0.36, 1) infinite;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+/* 인터랙티브 깊이 — 그림자 대신 2px 오프셋 보더 (Brutalist press) */
+.press-offset {
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+.press-offset:active {
+  box-shadow: 2px 2px 0 var(--ink);
+  transform: translate(-1px, -1px);
+}
+
 .ease-slow {
   transition-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
-/* 스크롤바 가벼운 톤 */
+/* 스크롤바 */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(43, 42, 38, 0.2);
+  background: #c1c6d7;
   border-radius: 4px;
 }
 
-/* 계절 스크러버 슬라이더 */
+/* 타임라인 스크러버 — 테크니컬 슬라이더 */
 input[type="range"].season {
   -webkit-appearance: none;
   appearance: none;
-  height: 6px;
-  border-radius: 3px;
-  background: var(--paleice, #bfd4e3);
+  height: 4px;
+  border-radius: 2px;
+  background: #e0e3e5;
   outline: none;
 }
 input[type="range"].season::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 26px;
-  height: 26px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
-  background: #d8592e;
-  border: 3px solid var(--paper);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  background: #0070eb;
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 0 1px #0058bc;
   cursor: pointer;
 }
 input[type="range"].season::-moz-range-thumb {
-  width: 26px;
-  height: 26px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
-  background: #d8592e;
-  border: 3px solid var(--paper);
+  background: #0070eb;
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 0 1px #0058bc;
   cursor: pointer;
 }

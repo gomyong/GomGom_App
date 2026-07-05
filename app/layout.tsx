@@ -4,7 +4,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "곰곰 · 북극곰 여정 트래커",
   description:
-    "북극곰 한 마리에게 이름을 붙이고, 실제 추적 데이터 패턴을 따라 그 곰의 1년 여정을 손그림 지도 위에서 함께 걷는 앱.",
+    "북극곰 한 마리에게 이름을 붙이고, 실제 추적 데이터 패턴을 따라 그 곰의 1년 여정을 지도 위에서 함께 걷는 앱.",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#F5EFE2",
+  themeColor: "#F7F9FB",
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
@@ -37,7 +37,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Caveat:wght@400;600&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
           rel="stylesheet"
         />
         <link

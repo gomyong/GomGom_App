@@ -49,12 +49,13 @@ export const STATUS_LABEL: Record<Subpopulation["status"], string> = {
   unknown: "불명",
 };
 
-// PRD 6.4: 상태별 색 — 증가=코랄, 안정=블루, 감소=앰버, 불명=그레이
+// 상태별 색 — 디자인 가이드 팔레트: 증가=아크틱 블루, 안정=스틸,
+// 감소=절제된 경고 레드(가이드: warning은 desaturated red만), 불명=그레이
 export const STATUS_COLOR: Record<Subpopulation["status"], string> = {
-  increasing: "#D8592E",
-  stable: "#3D6FA8",
-  declining: "#E9B872",
-  unknown: "#9A968C",
+  increasing: "#0058bc",
+  stable: "#566068",
+  declining: "#ba1a1a",
+  unknown: "#a9afbe",
 };
 
 export function subpopById(id: string): Subpopulation | undefined {

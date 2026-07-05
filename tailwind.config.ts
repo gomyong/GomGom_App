@@ -1,8 +1,8 @@
 import type { Config } from "tailwindcss";
 
-// 곰곰 디자인 시스템 — PRD 5.2 컬러 팔레트 기반
+// 곰곰 디자인 시스템 — Design Guide_GomGom "Arctic Observation System" 기반
+// 과학적 정밀함 + 탐사 미학: 설백 배경, 아크틱 블루, 차콜 라인아트, 1px 보더
 const config: Config = {
-  darkMode: "class",
   content: [
     "./app/**/*.{ts,tsx}",
     "./components/**/*.{ts,tsx}",
@@ -10,21 +10,37 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        paper: "#F5EFE2", // 배경(종이) — 오래된 지도책 종이
-        ink: "#2B2A26", // 잉크(선/텍스트) — 따뜻한 먹선
-        ice: "#3D6FA8", // 쿨 액센트 — 바다·해빙·물
-        coral: "#D8592E", // 웜 액센트 — 곰의 체온·석양·관심지점
-        paleice: "#BFD4E3", // 보조 쿨 — 해빙 면
-        sand: "#E9B872", // 보조 웜 — 육지·툰드라·경고
-        // 다크모드
-        night: "#1B2430", // 짙은 남색 종이
+        surface: "#f7f9fb", // 배경 — Ice White
+        "surface-low": "#f2f4f6",
+        "surface-container": "#eceef0",
+        card: "#ffffff",
+        ink: "#191c1e", // 차콜 — 라인아트/본문
+        muted: "#414755", // on-surface-variant
+        outline: "#717786",
+        "outline-variant": "#c1c6d7",
+        hairline: "#e0e3e5",
+        primary: "#0058bc", // Arctic Blue
+        "primary-bright": "#0070eb",
+        "primary-tint": "#d8e2ff",
+        glacier: "#dae4ee", // Glacier Tint — secondary container
+        steel: "#566068", // secondary
+        alert: "#ba1a1a", // 경고 — 절제된 레드
+        "alert-tint": "#ffdad6",
       },
       fontFamily: {
-        hand: ["var(--font-hand)", "Gaegu", "Caveat", "cursive"],
-        body: ["var(--font-body)", "Pretendard", "system-ui", "sans-serif"],
+        display: ['"Hanken Grotesk"', "Pretendard", "system-ui", "sans-serif"],
+        body: ['"Hanken Grotesk"', "Pretendard", "system-ui", "sans-serif"],
+        mono: ['"JetBrains Mono"', "ui-monospace", "SFMono-Regular", "monospace"],
       },
-      boxShadow: {
-        card: "3px 4px 0 rgba(43, 42, 38, 0.12)",
+      borderRadius: {
+        sm: "0.125rem",
+        DEFAULT: "0.25rem",
+        md: "0.375rem",
+        lg: "0.5rem",
+        xl: "0.75rem",
+      },
+      letterSpacing: {
+        caps: "0.05em",
       },
     },
   },

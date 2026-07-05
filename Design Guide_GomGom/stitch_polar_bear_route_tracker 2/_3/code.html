@@ -1,0 +1,303 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>ArcticPulse - Bear B-12 Movement History</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary": "#5a5c5e",
+                        "on-surface-variant": "#414755",
+                        "on-secondary-container": "#5c666e",
+                        "surface-container": "#eceef0",
+                        "background": "#f7f9fb",
+                        "inverse-on-surface": "#eff1f3",
+                        "surface-bright": "#f7f9fb",
+                        "inverse-primary": "#adc6ff",
+                        "on-secondary-fixed-variant": "#3e4850",
+                        "secondary": "#566068",
+                        "surface": "#f7f9fb",
+                        "outline": "#717786",
+                        "on-tertiary-fixed-variant": "#454749",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-fixed": "#1a1c1e",
+                        "error": "#ba1a1a",
+                        "on-tertiary-container": "#fcfcff",
+                        "primary-fixed-dim": "#adc6ff",
+                        "secondary-container": "#dae4ee",
+                        "error-container": "#ffdad6",
+                        "on-primary": "#ffffff",
+                        "inverse-surface": "#2d3133",
+                        "on-background": "#191c1e",
+                        "on-primary-fixed-variant": "#004493",
+                        "on-error": "#ffffff",
+                        "outline-variant": "#c1c6d7",
+                        "on-secondary-fixed": "#131d24",
+                        "on-surface": "#191c1e",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed-dim": "#bec8d1",
+                        "tertiary-fixed": "#e2e2e5",
+                        "surface-container-highest": "#e0e3e5",
+                        "tertiary-fixed-dim": "#c6c6c9",
+                        "primary": "#0058bc",
+                        "tertiary-container": "#737577",
+                        "primary-fixed": "#d8e2ff",
+                        "on-primary-fixed": "#001a41",
+                        "on-tertiary": "#ffffff",
+                        "primary-container": "#0070eb",
+                        "surface-variant": "#e0e3e5",
+                        "surface-tint": "#005bc1",
+                        "secondary-fixed": "#dae4ee",
+                        "on-primary-container": "#fefcff",
+                        "surface-container-low": "#f2f4f6",
+                        "surface-dim": "#d8dadc",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-high": "#e6e8ea"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin-desktop": "64px",
+                        "stack-lg": "32px",
+                        "gutter-mobile": "16px",
+                        "gutter-desktop": "24px",
+                        "margin-mobile": "20px",
+                        "stack-sm": "8px",
+                        "unit": "4px",
+                        "stack-md": "16px"
+                    },
+                    "fontFamily": {
+                        "data-mono": ["JetBrains Mono"],
+                        "body-sm": ["Hanken Grotesk"],
+                        "label-caps": ["JetBrains Mono"],
+                        "headline-md": ["Hanken Grotesk"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "headline-lg-mobile": ["Hanken Grotesk"],
+                        "body-lg": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "data-mono": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "700" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: theme('colors.background');
+            color: theme('colors.on-background');
+        }
+        /* Custom scrollbar for timeline */
+        .timeline-scroll::-webkit-scrollbar {
+            height: 6px;
+        }
+        .timeline-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .timeline-scroll::-webkit-scrollbar-thumb {
+            background-color: theme('colors.outline-variant');
+            border-radius: theme('borderRadius.full');
+        }
+        /* Grid pattern for the map container to simulate blueprint */
+        .blueprint-grid {
+            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(to right, theme('colors.surface-variant') 1px, transparent 1px),
+                linear-gradient(to bottom, theme('colors.surface-variant') 1px, transparent 1px);
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col font-body-lg text-body-lg">
+<!-- TopAppBar (Suppressed for focused detail view, but included as per instructions, modified for sub-page) -->
+<header class="bg-surface border-b border-outline w-full top-0 sticky z-40 flex items-center justify-between px-margin-mobile py-stack-sm md:px-margin-desktop md:py-stack-md">
+<div class="flex items-center gap-stack-sm">
+<button class="p-unit rounded-full hover:bg-surface-container transition-colors text-on-surface-variant flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<div class="font-headline-md text-headline-md font-bold text-primary">ArcticPulse</div>
+</div>
+<div class="flex items-center gap-stack-sm">
+<span class="font-label-caps text-label-caps text-on-surface-variant bg-surface-container px-stack-sm py-unit rounded-full">B-12</span>
+<button class="p-unit rounded-full hover:bg-surface-container transition-colors text-on-surface-variant flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="share">share</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow flex flex-col md:flex-row max-w-[1440px] mx-auto w-full">
+<!-- Sidebar / Context (Desktop) -->
+<aside class="hidden md:flex flex-col w-80 bg-surface-container h-[calc(100vh-65px)] border-r border-outline sticky top-[65px] overflow-y-auto p-gutter-desktop gap-stack-lg">
+<!-- Bear Profile Card -->
+<div class="bg-surface border border-outline rounded-lg p-stack-md flex flex-col gap-stack-md shadow-sm">
+<div class="flex items-start justify-between">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface">Bear B-12</h1>
+<p class="font-data-mono text-data-mono text-on-surface-variant mt-unit">ID: 994-A2B</p>
+</div>
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="pets" data-weight="fill">pets</span>
+</div>
+<div class="flex gap-stack-sm flex-wrap">
+<span class="bg-surface-container-high text-on-surface font-label-caps text-label-caps px-stack-sm py-unit rounded-full border border-outline-variant">Adult Male</span>
+<span class="bg-surface-container-high text-on-surface font-label-caps text-label-caps px-stack-sm py-unit rounded-full border border-outline-variant">Collared 2022</span>
+<span class="bg-secondary-container text-on-secondary-container font-label-caps text-label-caps px-stack-sm py-unit rounded-full border border-outline-variant flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-primary inline-block"></span> Active
+                    </span>
+</div>
+<div class="h-px bg-outline-variant w-full my-unit"></div>
+<div class="grid grid-cols-2 gap-stack-sm">
+<div>
+<div class="font-label-caps text-label-caps text-on-surface-variant">30-Day Dist.</div>
+<div class="font-data-mono text-data-mono text-on-surface font-semibold">412 km</div>
+</div>
+<div>
+<div class="font-label-caps text-label-caps text-on-surface-variant">Avg Pace</div>
+<div class="font-data-mono text-data-mono text-on-surface font-semibold">14 km/d</div>
+</div>
+<div>
+<div class="font-label-caps text-label-caps text-on-surface-variant">Last Fix</div>
+<div class="font-data-mono text-data-mono text-on-surface font-semibold">2h ago</div>
+</div>
+<div>
+<div class="font-label-caps text-label-caps text-on-surface-variant">Battery</div>
+<div class="font-data-mono text-data-mono text-on-surface font-semibold text-primary">84%</div>
+</div>
+</div>
+</div>
+<!-- Environmental Notes -->
+<div class="flex flex-col gap-stack-sm">
+<h3 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="science">science</span>
+                    Field Notes
+                </h3>
+<div class="bg-surface border border-outline rounded-lg p-stack-md flex flex-col gap-stack-md relative">
+<div class="absolute top-0 left-0 w-1 h-full bg-primary rounded-l-lg"></div>
+<div class="font-body-sm text-body-sm text-on-surface">
+<p class="mb-2"><strong class="font-data-mono text-on-surface-variant mr-2">12/04:</strong> Deviation from expected migratory route observed. Subject lingered near coastal inlet.</p>
+<p><strong class="font-data-mono text-on-surface-variant mr-2">18/04:</strong> Encountered sea ice fracture zone. Pace slowed significantly; navigating complex terrain.</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Map Area -->
+<section class="flex-grow flex flex-col relative h-[442px] md:h-[calc(100vh-65px)]">
+<!-- Mobile Header / Summary (Hidden on Desktop) -->
+<div class="md:hidden bg-surface-container p-gutter-mobile flex flex-col gap-stack-sm border-b border-outline">
+<div class="flex justify-between items-center">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">Bear B-12</h1>
+<span class="bg-secondary-container text-on-secondary-container font-label-caps text-label-caps px-stack-sm py-unit rounded-full border border-outline-variant flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-primary inline-block"></span> Active
+                    </span>
+</div>
+<div class="flex justify-between text-on-surface-variant font-data-mono text-data-mono border-t border-outline-variant pt-stack-sm mt-unit">
+<span>30d: 412km</span>
+<span>Last: 2h ago</span>
+</div>
+</div>
+<!-- The Map Canvas -->
+<div class="flex-grow relative blueprint-grid bg-surface-container-lowest overflow-hidden" data-location="Svalbard">
+<!-- Placeholder for actual map rendering -->
+<div class="absolute inset-0 w-full h-full opacity-60 flex items-center justify-center mix-blend-multiply">
+<img alt="Map Background" class="w-full h-full object-cover grayscale opacity-40" data-alt="A stark, minimalist isometric line-art map of an arctic landscape. Black and charcoal line drawings on a pristine white background. Showing jagged ice floes, minimalist mountain peaks, and dotted lines indicating paths. Brutalist scientific blueprint style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBPxkooEI4fMJ72tbrm44_Q6m9rjDVaMsi1U_nMkBiQBIuGB_XooD3lJnCsHajRM5mypQkrUQN9wjT8DVajCe0UOBc3f-BMp_YydyQJsqUgXJGto_80FEccEp_yaXXV-73q3jjtnYL43UhVfSM1-pQ4fFZM56jtEq6o0_ZeRkUdBCQ6LSd5QNRhhVhz-zfTquSZeM1n-smIcFuYyCwAJfcvnpZsvGTFfutPzrucVZAr06dOBayqYUQ">
+</div>
+<!-- Map UI Overlay -->
+<div class="absolute top-gutter-mobile left-gutter-mobile flex flex-col gap-stack-sm z-10">
+<button class="w-10 h-10 bg-surface border border-outline rounded-full flex items-center justify-center text-on-surface hover:bg-surface-container transition-colors shadow-sm">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</button>
+<button class="w-10 h-10 bg-surface border border-outline rounded-full flex items-center justify-center text-on-surface hover:bg-surface-container transition-colors shadow-sm">
+<span class="material-symbols-outlined" data-icon="remove">remove</span>
+</button>
+</div>
+<div class="absolute top-gutter-mobile right-gutter-mobile bg-surface border border-outline px-stack-sm py-unit rounded-full flex items-center gap-2 shadow-sm z-10">
+<span class="material-symbols-outlined text-on-surface-variant text-sm" data-icon="layers">layers</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">Topographic</span>
+</div>
+<!-- Simulated Path (SVG overlay could go here, for now using absolute positioning for dots) -->
+<div class="absolute inset-0 pointer-events-none">
+<!-- Start Point -->
+<div class="absolute top-[20%] left-[30%] flex items-center justify-center">
+<div class="w-2 h-2 bg-tertiary rounded-full border border-white"></div>
+<span class="absolute top-4 font-data-mono text-[10px] text-tertiary">Apr 1</span>
+</div>
+<!-- Path line (conceptual) -->
+<svg class="absolute inset-0 w-full h-full" style="stroke: theme('colors.on-surface'); stroke-width: 1.5; stroke-dasharray: 4 4; fill: none; opacity: 0.6;">
+<path d="M 30% 20% Q 40% 30% 50% 50% T 70% 60%"></path>
+</svg>
+<!-- Current Position -->
+<div class="absolute top-[60%] left-[70%] flex items-center justify-center">
+<div class="w-4 h-4 bg-primary rounded-full flex items-center justify-center relative">
+<div class="absolute inset-0 bg-primary rounded-full animate-ping opacity-50"></div>
+<div class="w-2 h-2 bg-white rounded-full"></div>
+</div>
+<div class="absolute left-6 bg-surface border border-outline px-2 py-1 rounded shadow-sm whitespace-nowrap">
+<span class="font-label-caps text-label-caps text-primary block">Current Location</span>
+<span class="font-data-mono text-[10px] text-on-surface-variant">78.22° N, 15.65° E</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Timeline Summary Bottom Bar -->
+<div class="bg-surface border-t border-outline h-48 md:h-56 flex flex-col z-20">
+<div class="px-gutter-desktop py-stack-sm border-b border-outline-variant flex justify-between items-center bg-surface-container-low">
+<h3 class="font-headline-md text-headline-md text-on-surface">30-Day Movement Timeline</h3>
+<div class="flex gap-2">
+<button class="font-label-caps text-label-caps text-primary border border-primary px-3 py-1 rounded hover:bg-primary-fixed-dim hover:text-on-primary-fixed transition-colors">Export CSV</button>
+</div>
+</div>
+<!-- Horizontal scrolling timeline -->
+<div class="flex-grow overflow-x-auto timeline-scroll p-gutter-desktop flex items-end gap-1 relative">
+<!-- Graph visualization conceptual structure -->
+<div class="absolute top-4 left-gutter-desktop font-label-caps text-[10px] text-on-surface-variant">Distance/Day (km)</div>
+<!-- Day columns -->
+<script>
+                        // Simple script to generate bars for the timeline visualization
+                        for(let i=1; i<=30; i++) {
+                            const height = Math.floor(Math.random() * 80) + 10;
+                            const isEvent = Math.random() > 0.8;
+                            const day = 31-i;
+                            
+                            document.write(`
+                                <div class="flex flex-col items-center justify-end h-full min-w-[32px] group relative cursor-crosshair">
+                                    ${isEvent ? `<div class="absolute top-0 w-2 h-2 bg-secondary rounded-full mb-1"></div>` : ''}
+                                    
+                                    <div class="w-full flex items-end justify-center h-[100px] border-b border-outline-variant pb-2 relative">
+                                        <!-- Tooltip -->
+                                        <div class="hidden group-hover:flex absolute bottom-full mb-2 bg-inverse-surface text-inverse-on-surface font-data-mono text-[10px] p-2 rounded flex-col whitespace-nowrap z-50">
+                                            <span>Day -${day}</span>
+                                            <span class="text-primary-fixed-dim">${height} km</span>
+                                            ${isEvent ? '<span class="text-secondary-fixed-dim mt-1 border-t border-outline pt-1">Ice traverse</span>' : ''}
+                                        </div>
+                                        
+                                        <div class="w-4 bg-surface-variant group-hover:bg-primary-fixed-dim transition-colors border border-outline rounded-t-sm" style="height: ${height}%"></div>
+                                    </div>
+                                    <div class="font-data-mono text-[10px] text-on-surface-variant mt-2 text-center w-full ${day % 5 === 0 ? 'text-on-surface font-bold' : 'opacity-50'}">
+                                        ${day % 5 === 0 ? '-'+day : ''}
+                                    </div>
+                                </div>
+                            `);
+                        }
+                    </script>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Mobile only, structural adherence) -->
+<!-- Suppressed due to task-focused context (Detailed History), but kept commented to show logic -->
+<!-- <nav class="md:hidden ..."></nav> -->
+</body></html>

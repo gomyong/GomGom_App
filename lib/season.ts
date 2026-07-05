@@ -7,11 +7,12 @@ export const SEASON_LABEL: Record<Season, string> = {
   fall: "가을",
 };
 
-export const SEASON_EMOJI: Record<Season, string> = {
-  winter: "❄️",
-  spring: "🌱",
-  summer: "☀️",
-  fall: "🍂",
+// label-caps 표기용 (디자인 가이드: 카테고리 라벨은 모노 대문자)
+export const SEASON_CAPS: Record<Season, string> = {
+  winter: "WINTER",
+  spring: "SPRING",
+  summer: "SUMMER",
+  fall: "FALL",
 };
 
 export const POSE_LABEL: Record<string, string> = {

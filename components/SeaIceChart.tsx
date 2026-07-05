@@ -1,89 +1,69 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import rough from "roughjs";
 import { SEA_ICE } from "@/lib/ecosystem";
 
 const W = 640;
 const H = 320;
-const PAD = 48;
+const PAD = 52;
 
-// PRD 6.4 해빙 시계열 — 손그림 라인 차트 (1979 이후 9월 최소 해빙)
+const INK = "#191c1e";
+const OUTLINE = "#717786";
+const GRID = "#eceef0";
+const PRIMARY = "#0058bc";
+const MONO = "'JetBrains Mono', monospace";
+
+// PRD 6.4 해빙 시계열 — 데이터 퍼스트 라인 차트 (1979 이후 9월 최소 해빙)
 export default function SeaIceChart() {
-  const ref = useRef<SVGSVGElement>(null);
+  const minY = 1979;
+  const maxY = 2023;
+  const maxV = 8;
 
-  useEffect(() => {
-    const svg = ref.current;
-    if (!svg) return;
-    while (svg.firstChild) svg.removeChild(svg.firstChild);
-    const rc = rough.svg(svg);
-    const ns = "http://www.w3.org/2000/svg";
-    const ink = "#2B2A26";
-    const ice = "#3D6FA8";
+  const px = (y: number) => PAD + ((y - minY) / (maxY - minY)) * (W - PAD * 1.5);
+  const py = (v: number) => H - PAD - (v / maxV) * (H - PAD * 1.8);
 
-    const years = SEA_ICE.map((d) => d.year);
-    const vals = SEA_ICE.map((d) => d.extentMkm2);
-    const minY = 1979;
-    const maxY = 2023;
-    const maxV = 8;
-
-    const px = (y: number) => PAD + ((y - minY) / (maxY - minY)) * (W - PAD * 1.5);
-    const py = (v: number) => H - PAD - (v / maxV) * (H - PAD * 1.8);
-
-    // 축
-    svg.appendChild(rc.line(PAD, H - PAD, W - PAD / 2, H - PAD, { stroke: ink, roughness: 1.5 }));
-    svg.appendChild(rc.line(PAD, PAD / 2, PAD, H - PAD, { stroke: ink, roughness: 1.5 }));
-
-    // y축 눈금
-    for (const v of [2, 4, 6, 8]) {
-      const t = document.createElementNS(ns, "text");
-      t.setAttribute("x", String(PAD - 8));
-      t.setAttribute("y", String(py(v) + 4));
-      t.setAttribute("text-anchor", "end");
-      t.setAttribute("font-size", "12");
-      t.setAttribute("fill", ink);
-      t.textContent = String(v);
-      svg.appendChild(t);
-    }
-    // x축 눈금
-    for (const y of [1979, 1995, 2012, 2023]) {
-      const t = document.createElementNS(ns, "text");
-      t.setAttribute("x", String(px(y)));
-      t.setAttribute("y", String(H - PAD + 18));
-      t.setAttribute("text-anchor", "middle");
-      t.setAttribute("font-size", "12");
-      t.setAttribute("fill", ink);
-      t.textContent = String(y);
-      svg.appendChild(t);
-    }
-
-    // 손그림 라인
-    const pts = SEA_ICE.map((d) => [px(d.year), py(d.extentMkm2)]) as [number, number][];
-    svg.appendChild(rc.linearPath(pts, { stroke: ice, strokeWidth: 3, roughness: 1.3 }));
-    // 점
-    for (const [x, y] of pts) {
-      svg.appendChild(
-        rc.circle(x, y, 7, { fill: ice, fillStyle: "solid", stroke: ink, strokeWidth: 0.8, roughness: 1 })
-      );
-    }
-
-    // 축 라벨
-    const yl = document.createElementNS(ns, "text");
-    yl.setAttribute("x", "6");
-    yl.setAttribute("y", String(PAD / 2 - 4));
-    yl.setAttribute("font-size", "12");
-    yl.setAttribute("fill", ink);
-    yl.textContent = "백만 km²";
-    svg.appendChild(yl);
-  }, []);
+  const pts = SEA_ICE.map((d) => [px(d.year), py(d.extentMkm2)] as const);
+  const linePath = pts.map(([x, y], i) => `${i === 0 ? "M" : "L"} ${x.toFixed(1)} ${y.toFixed(1)}`).join(" ");
+  const areaPath = `${linePath} L ${pts[pts.length - 1][0].toFixed(1)} ${H - PAD} L ${pts[0][0].toFixed(1)} ${H - PAD} Z`;
 
   return (
     <svg
-      ref={ref}
       viewBox={`0 0 ${W} ${H}`}
-      className="w-full h-auto"
+      className="h-auto w-full"
       role="img"
       aria-label="1979년 이후 9월 최소 해빙 면적 추이"
-    />
+    >
+      {/* 수평 그리드 + y축 눈금 */}
+      {[2, 4, 6, 8].map((v) => (
+        <g key={v}>
+          <line x1={PAD} y1={py(v)} x2={W - PAD / 2} y2={py(v)} stroke={GRID} strokeWidth="1" />
+          <text x={PAD - 10} y={py(v) + 4} textAnchor="end" fontSize="11" fill={OUTLINE} fontFamily={MONO}>
+            {v}
+          </text>
+        </g>
+      ))}
+
+      {/* 축 */}
+      <line x1={PAD} y1={H - PAD} x2={W - PAD / 2} y2={H - PAD} stroke={INK} strokeWidth="1" />
+      <line x1={PAD} y1={PAD / 2} x2={PAD} y2={H - PAD} stroke={INK} strokeWidth="1" />
+
+      {/* x축 눈금 */}
+      {[1979, 1995, 2012, 2023].map((y) => (
+        <text key={y} x={px(y)} y={H - PAD + 20} textAnchor="middle" fontSize="11" fill={OUTLINE} fontFamily={MONO}>
+          {y}
+        </text>
+      ))}
+
+      {/* 면적 틴트 + 데이터 라인 */}
+      <path d={areaPath} fill={PRIMARY} opacity="0.08" />
+      <path d={linePath} fill="none" stroke={PRIMARY} strokeWidth="2" strokeLinejoin="round" />
+      {pts.map(([x, y], i) => (
+        <circle key={i} cx={x} cy={y} r="3" fill="#ffffff" stroke={PRIMARY} strokeWidth="1.5" />
+      ))}
+
+      {/* 축 라벨 */}
+      <text x="8" y={PAD / 2 - 6} fontSize="11" fill={OUTLINE} fontFamily={MONO} letterSpacing="0.05em">
+        M KM²
+      </text>
+    </svg>
   );
 }

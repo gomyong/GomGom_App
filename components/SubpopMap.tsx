@@ -2,7 +2,7 @@
 
 import { SUBPOPULATIONS, STATUS_COLOR, STATUS_LABEL } from "@/lib/ecosystem";
 
-// PRD 6.4 북극 전체 지도 — 19개 아개체군을 상태별 색 점으로 (손그림 도식)
+// PRD 6.4 북극 전체 지도 — 19개 아개체군 상태 도트 (블루프린트 도식)
 export default function SubpopMap({
   focus,
   onSelect,
@@ -11,11 +11,27 @@ export default function SubpopMap({
   onSelect?: (id: string) => void;
 }) {
   return (
-    <svg viewBox="0 0 100 100" className="w-full h-auto" role="img" aria-label="북극 아개체군 지도">
-      {/* 북극해 도식 원 */}
-      <circle cx="50" cy="45" r="42" fill="#BFD4E3" opacity="0.35" stroke="#2B2A26" strokeWidth="0.4" strokeDasharray="1.5 1.5" />
-      <text x="50" y="10" textAnchor="middle" fontSize="3.4" fill="#2B2A26" style={{ fontFamily: "var(--font-hand), cursive" }}>
-        북극해
+    <svg viewBox="0 0 100 100" className="h-auto w-full" role="img" aria-label="북극 아개체군 지도">
+      {/* 그리드 배경 */}
+      {Array.from({ length: 11 }, (_, i) => i * 10).map((v) => (
+        <g key={v}>
+          <line x1={v} y1="0" x2={v} y2="100" stroke="#f2f4f6" strokeWidth="0.3" />
+          <line x1="0" y1={v} x2="100" y2={v} stroke="#f2f4f6" strokeWidth="0.3" />
+        </g>
+      ))}
+
+      {/* 북극해 도식 원 — 점선 아웃라인 */}
+      <circle cx="50" cy="45" r="42" fill="#dae4ee" opacity="0.4" stroke="#717786" strokeWidth="0.35" strokeDasharray="1.6 1.4" />
+      <text
+        x="50"
+        y="9"
+        textAnchor="middle"
+        fontSize="3.2"
+        fill="#717786"
+        letterSpacing="0.4"
+        style={{ fontFamily: "'JetBrains Mono', monospace" }}
+      >
+        ARCTIC OCEAN
       </text>
 
       {SUBPOPULATIONS.map((s) => {
@@ -26,16 +42,29 @@ export default function SubpopMap({
             style={{ cursor: onSelect ? "pointer" : "default" }}
             onClick={() => onSelect?.(s.id)}
           >
+            {isFocus && (
+              <circle cx={s.x} cy={s.y} r="5" fill={STATUS_COLOR[s.status]} opacity="0.15" />
+            )}
             <circle
               cx={s.x}
               cy={s.y}
-              r={isFocus ? 3.6 : 2.4}
+              r={isFocus ? 2.6 : 1.9}
               fill={STATUS_COLOR[s.status]}
-              stroke="#2B2A26"
-              strokeWidth={isFocus ? 0.8 : 0.4}
+              stroke="#ffffff"
+              strokeWidth={isFocus ? 0.7 : 0.5}
             />
             {isFocus && (
-              <circle cx={s.x} cy={s.y} r="5.2" fill="none" stroke="#D8592E" strokeWidth="0.6" strokeDasharray="1 1" />
+              <text
+                x={s.x}
+                y={s.y - 4.5}
+                textAnchor="middle"
+                fontSize="3"
+                fill="#191c1e"
+                fontWeight="600"
+                style={{ fontFamily: "'JetBrains Mono', 'Pretendard', monospace" }}
+              >
+                {s.id}
+              </text>
             )}
           </g>
         );
@@ -46,10 +75,10 @@ export default function SubpopMap({
 
 export function StatusLegend() {
   return (
-    <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
+    <div className="flex flex-wrap gap-x-4 gap-y-1.5">
       {(["increasing", "stable", "declining", "unknown"] as const).map((k) => (
-        <span key={k} className="flex items-center gap-1.5">
-          <span className="inline-block h-3 w-3 rounded-full" style={{ background: STATUS_COLOR[k] }} />
+        <span key={k} className="flex items-center gap-1.5 text-xs text-muted">
+          <span className="inline-block h-2.5 w-2.5 rounded-full" style={{ background: STATUS_COLOR[k] }} />
           {STATUS_LABEL[k]}
         </span>
       ))}

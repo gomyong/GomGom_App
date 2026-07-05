@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Onboarding from "@/components/Onboarding";
 import StoryMode from "@/components/StoryMode";
 import BottomNav from "@/components/BottomNav";
+import TopBar from "@/components/TopBar";
 import { getBear } from "@/lib/bears";
 
 const KEY = "gomgom.myBear";
@@ -34,6 +35,7 @@ export default function Home() {
 
   return (
     <>
+      <TopBar />
       {bear ? (
         <StoryMode bear={bear} onChangeBear={change} />
       ) : (
