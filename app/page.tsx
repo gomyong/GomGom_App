@@ -5,6 +5,7 @@ import Onboarding from "@/components/Onboarding";
 import StoryMode from "@/components/StoryMode";
 import BottomNav from "@/components/BottomNav";
 import TopBar from "@/components/TopBar";
+import PolarBearAiModal from "@/components/PolarBearAiModal";
 import { getBear } from "@/lib/bears";
 
 const KEY = "gomgom.myBear";
@@ -41,6 +42,7 @@ export default function Home() {
       ) : (
         <Onboarding onPick={pick} />
       )}
+      <PolarBearAiModal bearName={bear?.name || "아쿠"} />
       <BottomNav />
     </>
   );
